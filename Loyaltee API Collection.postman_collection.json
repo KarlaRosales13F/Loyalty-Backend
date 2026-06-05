@@ -1,0 +1,410 @@
+{
+  "info": {
+    "_postman_id": "ca38af7b-b414-47ba-8682-32ae119450bb",
+    "name": "Loyaltee API Collection",
+    "description": "Colección Postman para la API Loyalty Backend de tienda deportiva.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "44963140",
+    "_collection_link": "https://go.postman.co/collection/44963140-ca38af7b-b414-47ba-8682-32ae119450bb?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth / Register",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Karla\",\n  \"email\": \"karla.rosalesc06@gmail.com\",\n  \"telefono\": \"1234567890\",\n  \"password\": \"Password123!\",\n  \"password2\": \"Password123!\",\n  \"rol\": \"cliente\"\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/auth/register/",
+          "host": [
+            "{{loyalty}}"
+          ],
+          "path": [
+            "auth",
+            "register",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Auth / Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\r",
+              "if (pm.response.code === 200) {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    if (responseData.access) {\r",
+              "        pm.environment.set(\"loyalty\", responseData.access);\r",
+              "        console.log(\"¡Token guardado con éxito en {{loyalty}}!\");\r",
+              "    } else {\r",
+              "        console.warn(\"No se encontró la propiedad 'access' en la respuesta.\");\r",
+              "    }\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin1234\"\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/auth/login/",
+          "host": [
+            "{{loyalty}}"
+          ],
+          "path": [
+            "auth",
+            "login",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Auth / Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refresh\": \"{{refreshToken}}\"\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/auth/logout/",
+          "host": [
+            "{{loyalty}}"
+          ],
+          "path": [
+            "auth",
+            "logout",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Users / Me",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{loyalty}}/users/me/",
+          "host": [
+            "{{loyalty}}"
+          ],
+          "path": [
+            "users",
+            "me",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Users / Change Password",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"current_password\": \"admin1234\",\n  \"new_password\": \"admin12345\",\n  \"new_password2\": \"admin12345\"\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/users/change-password/",
+          "host": [
+            "{{loyalty}}"
+          ],
+          "path": [
+            "users",
+            "change-password",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Compras / List",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{loyalty}}/compras/",
+          "host": [
+            "{{loyalty}}"
+          ],
+          "path": [
+            "compras",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Compras / Create",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"total\": 150.00,\n  \"metodo_pago\": \"tarjeta\"\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/compras/",
+          "host": [
+            "{{loyalty}}"
+          ],
+          "path": [
+            "compras",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Puntos / Acumular",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"puntos\": 100\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/puntos/acumular/",
+          "host": [
+            "{{loyalty}}"
+          ],
+          "path": [
+            "puntos",
+            "acumular",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Puntos / Retrieve",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{loyalty}}/puntos/{{puntosId}}/",
+          "host": [
+            "{{loyalty}}"
+          ],
+          "path": [
+            "puntos",
+            "{{puntosId}}",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Recompensas / List",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{loyalty}}/recompensas/",
+          "host": [
+            "{{loyalty}}"
+          ],
+          "path": [
+            "recompensas",
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://loyalty"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "refreshToken",
+      "value": ""
+    },
+    {
+      "key": "puntosId",
+      "value": "1"
+    }
+  ]
+}
