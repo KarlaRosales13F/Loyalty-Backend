@@ -1,0 +1,221 @@
+{
+  "info": {
+    "name": "Loyaltee API Collection",
+    "description": "Colección Postman para la API Loyalty Backend de tienda deportiva.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth / Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Karla\",\n  \"email\": \"karla.rosalesc06@gmail.com\",\n  \"telefono\": \"1234567890\",\n  \"password\": \"Password123!\",\n  \"password2\": \"Password123!\",\n  \"rol\": \"cliente\"\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/auth/register/",
+          "host": ["{{loyalty}}"],
+          "path": ["auth", "register", ""]
+        }
+      }
+    },
+    {
+      "name": "Auth / Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"karla.rosalesc06@gmail.com\",\n  \"password\": \"Password123!\"\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/auth/login/",
+          "host": ["{{loyalty}}"],
+          "path": ["auth", "login", ""]
+        }
+      }
+    },
+    {
+      "name": "Auth / Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refresh\": \"{{refreshToken}}\"\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/auth/logout/",
+          "host": ["{{loyalty}}"],
+          "path": ["auth", "logout", ""]
+        }
+      }
+    },
+    {
+      "name": "Users / Me",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "url": {
+          "raw": "{{loyalty}}/users/me/",
+          "host": ["{{loyalty}}"],
+          "path": ["users", "me", ""]
+        }
+      }
+    },
+    {
+      "name": "Users / Update Profile",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"telefono\": \"0987654321\"\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/users/update-profile/",
+          "host": ["{{loyalty}}"],
+          "path": ["users", "update-profile", ""]
+        }
+      }
+    },
+    {
+      "name": "Users / Change Password",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"current_password\": \"Password123!\",\n  \"new_password\": \"NewPassword123!\",\n  \"new_password2\": \"NewPassword123!\"\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/users/change-password/",
+          "host": ["{{loyalty}}"],
+          "path": ["users", "change-password", ""]
+        }
+      }
+    },
+    {
+      "name": "Compras / List",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "url": {
+          "raw": "{{loyalty}}/compras/",
+          "host": ["{{loyalty}}"],
+          "path": ["compras", ""]
+        }
+      }
+    },
+    {
+      "name": "Compras / Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"total\": 150.00,\n  \"metodo_pago\": \"tarjeta\"\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/compras/",
+          "host": ["{{loyalty}}"],
+          "path": ["compras", ""]
+        }
+      }
+    },
+    {
+      "name": "Puntos / Acumular",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"puntos\": 100\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/puntos/acumular/",
+          "host": ["{{loyalty}}"],
+          "path": ["puntos", "acumular", ""]
+        }
+      }
+    },
+    {
+      "name": "Puntos / Retrieve",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "url": {
+          "raw": "{{loyalty}}/puntos/{{puntosId}}/",
+          "host": ["{{loyalty}}"],
+          "path": ["puntos", "{{puntosId}}", ""]
+        }
+      }
+    },
+    {
+      "name": "Recompensas / List",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "url": {
+          "raw": "{{loyalty}}/recompensas/",
+          "host": ["{{loyalty}}"],
+          "path": ["recompensas", ""]
+        }
+      }
+    },
+    {
+      "name": "Recompensas / Canjear",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"recompensa_id\": 1\n}"
+        },
+        "url": {
+          "raw": "{{loyalty}}/recompensas/canjear/",
+          "host": ["{{loyalty}}"],
+          "path": ["recompensas", "canjear", ""]
+        }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://loyalty" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "puntosId", "value": "1" }
+  ]
+}
