@@ -3,15 +3,13 @@ from datetime import timedelta
 from pathlib import Path
 from decouple import config, Csv
 
-# Directorio base
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Carga de variables desde .env (para llaves que no rompen la app si faltan)
 SECRET_KEY    = config('SECRET_KEY', default='test_secret_key_provisional_12345')
 DEBUG         = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
 
-# Aplicaciones instaladas
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -20,14 +18,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    # Terceros
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
     'corsheaders',
     
-    # Apps Propias
     'loyaltee.apps.LoyalteeConfig',
 ]
 
@@ -39,7 +35,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -56,9 +52,7 @@ TEMPLATES = [{
     ]},
 }]
 
-# Configuración de base de datos:
-# - Por defecto usa SQLite en desarrollo para evitar fallos si no hay Postgres local.
-# - Si quieres usar Postgres, define DB_ENGINE=postgresql y las variables DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT.
+
 DB_ENGINE = config('DB_ENGINE', default='sqlite')
 
 if DB_ENGINE in ('postgresql', 'postgres'):
