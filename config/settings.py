@@ -56,21 +56,32 @@ TEMPLATES = [{
     ]},
 }]
 
-# CONFIGURACIÓN DE POSTGRESQL (Corregida sin 'config')
-# REEMPLAZA 'TU_CONTRASEÑA_DE_PGADMIN' por tu clave real
-DATABASES = {
-    'default': {
-        'ENGINE':   'django.db.backends.postgresql',
-        'NAME':     config('DB_NAME', default='loyaltee'),
-        'USER':     config('DB_USER', default='postgres'),
-        'PASSWORD': config('DB_PASSWORD', default='postgres'),  
-        'HOST':     config('DB_HOST', default='localhost'),
-        'PORT':     config('DB_PORT', default='5432'),
-        'TEST': {
-            'NAME': 'consulta_loyaltee_test_db',
-        },
+# Configuración de base de datos:
+# - Por defecto usa SQLite en desarrollo para evitar fallos si no hay Postgres local.
+# - Si quieres usar Postgres, define DB_ENGINE=postgresql y las variables DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT.
+DB_ENGINE = config('DB_ENGINE', default='sqlite')
+
+if DB_ENGINE in ('postgresql', 'postgres'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME', default='loyaltee'),
+            'USER': config('DB_USER', default='postgres'),
+            'PASSWORD': config('DB_PASSWORD', default='postgres'),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432'),
+            'TEST': {
+                'NAME': 'consulta_loyaltee_test_db',
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Internacionalización
 LANGUAGE_CODE = 'es-ec'

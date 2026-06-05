@@ -1,6 +1,10 @@
 from decouple import config
 import pprint
-import psycopg2
+
+try:
+    import psycopg as psycopg_driver
+except ImportError:
+    import psycopg2 as psycopg_driver
 
 params = {
     'dbname': config('DB_NAME'),
@@ -13,7 +17,7 @@ print('DB params repr:')
 pp = pprint.pformat(params)
 print(pp)
 try:
-    conn = psycopg2.connect(**params)
+    conn = psycopg_driver.connect(**params)
     print('CONNECTED')
     conn.close()
 except Exception as e:

@@ -24,7 +24,7 @@ class RecompensasViewSet(viewsets.ModelViewSet):
         recompensa_id = request.data.get('recompensa_id')
         if not recompensa_id:
             return Response(
-                {'error': 'El id de recompensa es requerido.'},s
+                {'error': 'El id de recompensa es requerido.'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         try:

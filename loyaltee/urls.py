@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from loyaltee.views.health import health_check
 from loyaltee.views.auth import RegisterView, LogoutView, CustomTokenView
-from loyaltee.views.user import UserViewSet
+from loyaltee.users.views import UserViewSet
 from loyaltee.views.ComprasView import ComprasViewSet
 from loyaltee.views.PuntosView import PuntosViewSet
 from loyaltee.views.recompensa import RecompensasViewSet

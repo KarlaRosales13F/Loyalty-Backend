@@ -42,21 +42,41 @@ class RegisterSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    # Campos mapeados para compatibilidad con Android
+    username = serializers.CharField(source='email', read_only=True)
     nombre = serializers.CharField(source='first_name', read_only=True)
+    apellido = serializers.CharField(source='last_name', read_only=True)
+    correo = serializers.CharField(source='email', read_only=True)
+    firstName = serializers.CharField(source='first_name', read_only=True)
+    lastName = serializers.CharField(source='last_name', read_only=True)
     telefono = serializers.SerializerMethodField()
     rol = serializers.SerializerMethodField()
     fecha_registro = serializers.DateTimeField(source='date_joined', read_only=True)
+    date_joined = serializers.DateTimeField(read_only=True)
+    is_staff = serializers.BooleanField(read_only=True)
+    is_active = serializers.BooleanField(read_only=True)
+    num_orders = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['id', 'nombre', 'email', 'telefono', 'rol', 'fecha_registro']
-        read_only_fields = ['id', 'fecha_registro']
+        fields = [
+            'id', 'username', 'email', 'nombre', 'apellido', 'correo',
+            'firstName', 'lastName', 'telefono', 'rol', 'fecha_registro',
+            'date_joined', 'is_staff', 'is_active', 'num_orders',
+        ]
+        read_only_fields = fields
 
     def get_telefono(self, obj):
         return getattr(getattr(obj, 'profile', None), 'telefono', '')
 
     def get_rol(self, obj):
         return getattr(getattr(obj, 'profile', None), 'rol', 'cliente')
+
+    def get_num_orders(self, obj):
+        # Contar compras del usuario si la relación existe
+        if hasattr(obj, 'compras'):
+            return obj.compras.count()
+        return 0
 
 
 class UserProfileSerializer(serializers.ModelSerializer):

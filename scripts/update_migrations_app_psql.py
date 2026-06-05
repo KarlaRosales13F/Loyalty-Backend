@@ -8,10 +8,13 @@ import sys
 from pathlib import Path
 
 try:
-    import psycopg2
-except Exception as exc:
-    print('psycopg2 is required to run this script:', exc)
-    sys.exit(1)
+    import psycopg as psycopg_driver
+except ImportError as exc:
+    try:
+        import psycopg2 as psycopg_driver
+    except ImportError:
+        print('psycopg or psycopg2 is required to run this script:', exc)
+        sys.exit(1)
 
 
 def parse_env(path):
@@ -38,7 +41,7 @@ def main():
     host = env.get('DB_HOST', 'localhost')
     port = env.get('DB_PORT', '5432')
 
-    conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
+    conn = psycopg_driver.connect(dbname=dbname, user=user, password=password, host=host, port=port)
     try:
         with conn:
             with conn.cursor() as cur:

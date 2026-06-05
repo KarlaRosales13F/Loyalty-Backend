@@ -3,34 +3,54 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
-from loyaltee.users.serializers import (
+from loyaltee.serializers import (
     UserSerializer,
     UserProfileSerializer,
     ChangePasswordSerializer,
     RegisterSerializer
 )
 
+
 class UserViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gestionar usuarios.
+    
+    Endpoints:
+    - GET/POST /users/ - Listar/crear usuarios
+    - GET /users/{id}/ - Detalle de usuario
+    - GET /users/me/ - Datos del usuario autenticado
+    - PUT/PATCH /users/update-profile/ - Actualizar perfil
+    - POST /users/change-password/ - Cambiar contraseña
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
     def get_permissions(self):
+        """Permisos por acción"""
         if self.action == 'create':
             return [AllowAny()]
         if self.action in ['me', 'update_profile', 'change_password']:
             return [IsAuthenticated()]
         return [IsAdminUser()]
 
+    def get_serializer_class(self):
+        """Serializer dinámico según la acción"""
+        if self.action == 'create':
+            return RegisterSerializer
+        return self.serializer_class
+
     @action(detail=False, methods=['get'], url_path='me')
     def me(self, request):
+        """Obtener datos del usuario autenticado"""
         serializer = self.get_serializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['put', 'patch'], url_path='update-profile')
     def update_profile(self, request):
+        """Actualizar perfil del usuario autenticado"""
         serializer = UserProfileSerializer(
-            request.user, 
-            data=request.data, 
+            request.user.profile,
+            data=request.data,
             partial=(request.method == 'PATCH'),
             context={'request': request}
         )
@@ -41,9 +61,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], url_path='change-password')
     def change_password(self, request):
+        """Cambiar contraseña del usuario autenticado"""
         serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             request.user.set_password(serializer.validated_data['new_password'])
             request.user.save()
-            return Response({'detail': 'Password updated successfully.'}, status=status.HTTP_200_OK)
+            return Response({'detail': 'Contraseña actualizada exitosamente.'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
